@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeowXQ | Кібер-ОС: Андрій & Головний Кіт</title>
+    <style>
+        /* ГЛОБАЛЬНІ СТИЛІ */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            margin: 0;
+            line-height: 1.6;
+            min-height: 200vh;
+        }
+        
+        /* ХЕДЕР ТА НАВІГАЦІЯ */
+        header { 
+            background-color: #1a1a1a; 
+            padding: 15px 5%; 
+            border-bottom: 3px solid #00ff99; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .logo { 
+            font-size: 2.2em; 
+            font-weight: bold; 
+            color: #00ff99; 
+            text-shadow: 0 0 5px rgba(0, 255, 153, 0.7); 
+        }
+        nav a { 
+            color: #ffffff; 
+            text-decoration: none; 
+            margin-left: 20px; 
+            font-weight: 500; 
+            transition: color 0.3s; 
+        }
+        nav a:hover { 
+            color: #00ff99; 
+        }
+
+        /* Стилі для кнопки автентифікації */
+        .auth-btn {
+            background-color: #00ff99;
+            color: #000 !important;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-left: 20px !important;
+            cursor: pointer;
+        }
+        .auth-btn:hover {
+            background-color: #00cc7a;
+            color: #000 !important;
+        }
+
+        /* ГЕРО-СЕКЦІЯ */
+        .hero { 
+            padding: 80px 5%; 
+            text-align: center; 
+            background: #0d0d0d; 
+        }
+        .hero h1 { 
+            font-size: 3.5em; 
+            color: #ffffff; 
+            margin-bottom: 10px; 
+        }
+        .hero h2 { 
+            font-size: 1.6em; 
+            color: #aaaaaa; 
+            margin-bottom: 40px; 
+        }
+
+        /* СЕКЦІЇ З ДИНАМІЧНИМ КОНТЕНТОМ */
+        .content-section {
+            padding: 50px 5%;
+            background-color: #000;
+        }
+        .content-section h2 {
+            font-size: 2em;
+            color: #00ff99;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .empty-list {
+            background-color: #1a1a1a;
+            color: #777;
+            padding: 20px;
+            text-align: center;
+            border: 1px dashed #00ff99;
+            margin: 0 auto;
+            max-width: 80%;
+        }
+
+        /* Стилі для блоків новин */
+        .news-item {
+            display: block;
+            background-color: #1a1a1a;
+            border: 2px solid #00ff99;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .news-item h3 {
+            color: #00ff99;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        .news-item .date-info {
+            color: #777;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        /* Стилі для блоку продукту */
+        .product-card {
+            background-color: #1a1a1a;
+            border: 2px solid #00ff99;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: left;
+            box-shadow: 0 0 15px rgba(0, 255, 153, 0.3);
+        }
+        .product-card h3 {
+            color: #fff;
+            border-bottom: 1px dashed #00ff99;
+            padding-bottom: 10px;
+        }
+        .product-card p {
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+        .product-card strong {
+            color: #ff9900;
+        }
+
+
+        /* ОС: ГОЛОВНИЙ КВАДРАТ */
+        .os-container {
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+            width: 400px;
+            height: 300px;
+            background-color: #000;
+            border: 4px solid #00ff99;
+            box-shadow: 0 0 20px rgba(0, 255, 153, 0.5);
+            z-index: 1000;
+            display: none; 
+            flex-direction: column;
+            padding: 10px;
+        }
+        
+        /* Панель завдань ОС */
+        .taskbar {
+            height: 30px;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #00ff99;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px;
+        }
+        .start-btn {
+            background-color: #00ff99;
+            color: #000;
+            font-weight: bold;
+            padding: 2px 8px;
+            cursor: pointer;
+        }
+        .time-display {
+            color: #00ff99;
+            font-size: 0.9em;
+        }
+
+        /* Робоча область ОС */
+        .desktop {
+            flex-grow: 1;
+            padding: 10px;
+            overflow: hidden;
+            background-color: #000000;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Програма "Що нового" */
+        .app-window {
+            flex-grow: 1;
+            background-color: #1a1a1a;
+            border: 1px solid #00ff99;
+            padding: 10px;
+        }
+        .app-window h4 {
+            color: #ffffff;
+            margin-top: 0;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+
+        /* Меню Пуск */
+        .start-menu {
+            position: absolute;
+            bottom: 40px; 
+            left: 10px;
+            width: 150px;
+            background-color: #333;
+            border: 1px solid #00ff99;
+            box-shadow: 0 0 10px rgba(0, 255, 153, 0.7);
+            z-index: 1001;
+            display: none;
+        }
+        .start-menu a {
+            display: block;
+            padding: 8px;
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid #555;
+        }
+        .start-menu a:hover {
+            background-color: #00ff99;
+            color: #000;
+        }
+
+        /* ФУТЕР */
+        footer { 
+            text-align: center; 
+            padding: 20px; 
+            background-color: #1a1a1a; 
+            border-top: 1px solid #333333; 
+            font-size: 0.9em; 
+        }
+        
+        /* МОДАЛЬНЕ ВІКНО АВТЕНТИФІКАЦІЇ */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 10% auto;
+            padding: 30px;
+            border: 3px solid #00ff99;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(0, 255, 153, 0.4);
+        }
+        .close-btn {
+            color: #00ff99;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #loginForm input, #registerForm input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #00ff99;
+            background-color: #000;
+            color: #fff;
+            border-radius: 4px;
+        }
+        #loginForm button, #registerForm button {
+            width: 100%;
+            background-color: #00ff99;
+            color: #000;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        .switch-link {
+            color: #00ff99;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">MeowXQ</div>
+        <nav>
+            <a href="#products">Продукти</a>
+            <a href="#news">Новини</a>
+            <a href="#">meowxq.com</a>
+            <a href="#" class="auth-btn" onclick="openAuthModal('login'); return false;">Увійти / Реєстрація</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Кібер-Технології, які тебе не збудять.</h1>
+            <h2>Філософія MeowXQ: Технології та Розвага.</h2>
+            <p style="color: #00ff99; margin-top: 30px;">Прокрутіть вниз, щоб побачити Кібер-ОС...</p>
+        </section>
+
+        <section class="content-section" id="news">
+            <h2>КІБЕР-НОВИНИ</h2>
+            
+            <div class="news-item" title="Ядро публічне!" 
+                 text="Ядро відкрите, тому ви всі можете переглядати цей сайт! Ми цінуємо прозорість." 
+                 date="18.10.2025">
+            </div>
+
+            <div class="news-item" title="Офіційний запуск MeowXQ!" 
+                 text="Сьогодні, 18 жовтня 2025 року, MeowXQ офіційно розпочала свою роботу! Наша місія: Технології та Розвага. Слідкуйте за оновленнями!" 
+                 date="18.10.2025">
+            </div>
+
+        </section>
+
+        <section class="content-section" id="products">
+            <h2>ПРОДУКТИ ТА РОЗРОБКА</h2>
+            <div class="products-container">
+                            </div>
+        </section>
+        
+        <div style="height: 50vh;"></div>
+
+    </main>
+
+    <div class="os-container" id="osContainer">
+        <div class="taskbar">
+            <span class="start-btn" id="startButton">ПУСК</span>
+            <span>Програма: Що нового (v1.0)</span>
+            <span class="time-display" id="timeDisplay">00:00:00</span>
+        </div>
+        <div class="desktop">
+            <div class="app-window">
+                <h4>Що нового у MeowXQ ОС:</h4>
+                <p style="color: #aaaaaa;">База оновлень порожня. **MeowXQ ОС** ініціалізовано.</p>
+                <p style="color: #00ff99;">Статус: **Стабільний.** Чекаємо на перше оновлення!</p>
+            </div>
+        </div>
+        
+        <div class="start-menu" id="startMenu">
+            <a href="#news">Кібер-Новини</a>
+            <a href="#products">Продукти</a>
+            <a href="#" onclick="shutdownSystem(); return false;">Вимкнути</a>
+        </div>
+    </div>
+    
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+            <h3 id="modalTitle">Вхід до MeowXQ</h3>
+            
+            <div id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Пошта (@meowxq)">
+                <input type="password" id="loginPassword" placeholder="Пароль">
+                <button onclick="loginUser()">Увійти</button>
+                <hr style="border-color: #333;">
+                <input type="text" id="recoveryCode" placeholder="Код Відновлення (миттєвий вхід)">
+                <button onclick="instantLogin()">З поверненням</button>
+            </div>
+
+            <div id="registerForm" style="display:none;">
+                <input type="email" id="registerEmail" placeholder="Пошта (@meowxq)">
+                <input type="password" id="registerPassword" placeholder="Створити Пароль">
+                <input type="text" id="registerRecoveryCode" placeholder="Створити Код Відновлення">
+                <button onclick="registerUser()">Зареєструватися</button>
+            </div>
+            
+            <p class="switch-link" onclick="toggleAuthForm()">Перейти до Реєстрації</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 MeowXQ Corporation. Всі права захищені. | Powered by Головний Кіт & Андрій.
+    </footer>
+
+    <script>
+        // ІМІТОВАНА КІБЕР-БАЗА ДАНИХ MEOWXQ
+        let MEOWXQ_DB = {
+            'andrii2@meowxq': { 
+                password: '12345677', 
+                recoveryCode: 'ANDRII7',
+                isAdmin: true // Тільки цей акаунт має права
+            },
+			'GODCAT228@meowxq': {
+			  password: 'YOBANA2281',
+			  recoveryCode: 'KIT228GOD',
+			  isAdmin: true
+			}
+        };
+
+        // НОВА БАЗА ДАНИХ: ПРОДУКТИ MEOWXQ
+        const MEOWXQ_PRODUCTS = [
+            {
+                name: "Операційна Система MeowXQOS",
+                model: "LDYouer2",
+                status: "В розробці (Бета-Фаза)",
+                description: "Операційна система, побудована на HTML! Просто заходиш і натискаєш почати роботу і готово і ОС загрузиться!",
+                features: ["Віртуальна SIM", "Годинник з секундами", "Бразуер, ютуб, і інші круті програми"],
+                expectedDate: "Кінець 2025"
+            }
+        ];
+        
+        const osContainer = document.getElementById('osContainer');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const startButton = document.getElementById('startButton');
+        const startMenu = document.getElementById('startMenu');
+        const desktop = document.querySelector('.desktop');
+        const productsContainer = document.querySelector('.products-container'); 
+
+        // Змінні для Ядерного Закриття
+        const header = document.querySelector('header');
+        const main = document.querySelector('main');
+        const footer = document.querySelector('footer');
+
+        // Змінні для Автентифікації
+        const authModal = document.getElementById('authModal');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const modalTitle = document.getElementById('modalTitle');
+        let isLoginMode = true;
+        let loggedInUser = null; 
+
+        // 1. ЛОГІКА ПОЯВИ ОС
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+            if (scrollPosition > 300) {
+                osContainer.style.display = 'flex';
+            }
+        });
+
+        // 2. ЛОГІКА ЧАСУ
+        function updateTime() {
+            const now = new Date();
+            const dateStr = '18.10.2025'; 
+            const timeStr = now.toLocaleTimeString('uk-UA');
+            timeDisplay.textContent = `${dateStr} ${timeStr}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime(); 
+
+        // 3. ЛОГІКА МЕНЮ ПУСК (оновлено для перевірки адмін-прав)
+        startButton.addEventListener('click', () => {
+            startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
+        });
+        document.querySelectorAll('.start-menu a').forEach(item => {
+            item.addEventListener('click', () => {
+                startMenu.style.display = 'none';
+            });
+        });
+
+        // ФУНКЦІЯ: ОНОВЛЕННЯ ПУСК
+        function updateStartMenu(isAdmin) {
+            let adminBtn = document.getElementById('adminButton');
+            if (adminBtn) {
+                adminBtn.remove();
+            }
+
+            if (isAdmin) {
+                adminBtn = document.createElement('a');
+                adminBtn.href = '#';
+                adminBtn.textContent = 'Адміністрація 👑';
+                adminBtn.id = 'adminButton';
+                adminBtn.onclick = function() {
+                    openAdminPanel();
+                    startMenu.style.display = 'none';
+                    return false;
+                };
+                startMenu.insertBefore(adminBtn, startMenu.lastElementChild);
+            }
+        }
+
+        // 4. ФУНКЦІЯ: ЗАКРИТТЯ СИСТЕМИ (ЯДЕРНЕ ЗАКРИТТЯ)
+        function shutdownSystem() {
+            osContainer.style.display = 'none'; 
+            header.style.display = 'none';
+            main.style.display = 'none';
+            footer.style.display = 'none';
+
+            document.body.style.backgroundColor = '#640000'; 
+            
+            setTimeout(() => {
+                document.body.style.backgroundColor = '#000000'; 
+                document.body.innerHTML = `
+                    <div style="text-align: center; color: #00ff99; margin-top: 150px; font-size: 2em; font-family: 'Courier New', monospace;">
+                        <p>*** ЯДРО MEOWXQ ЗАКРИТО ***</p>
+                        <p>[Симуляція завершена]</p>
+                        <p>Для перезавантаження: Онови сторінку.</p>
+                    </div>
+                `;
+            }, 500); 
+        }
+
+        // 5. ФУНКЦІЇ АВТЕНТИФІКАЦІЇ
+        function openAuthModal(mode) {
+            if (loggedInUser) {
+                alert(`Ви вже увійшли як ${loggedInUser.email}. Спочатку вийдіть з системи.`);
+                return;
+            }
+            authModal.style.display = 'block';
+            if (mode === 'register') {
+                isLoginMode = false;
+            } else {
+                isLoginMode = true;
+            }
+            toggleAuthForm(); 
+        }
+
+        function closeAuthModal() {
+            authModal.style.display = 'none';
+        }
+
+        function toggleAuthForm() {
+            loginForm.style.display = isLoginMode ? 'block' : 'none';
+            registerForm.style.display = isLoginMode ? 'none' : 'block';
+            modalTitle.textContent = isLoginMode ? 'Вхід до MeowXQ' : 'Реєстрація MeowXQ';
+            document.querySelector('.switch-link').textContent = isLoginMode ? 'Перейти до Реєстрації' : 'Перейти до Входу';
+            isLoginMode = !isLoginMode; 
+        }
+        document.querySelector('.switch-link').addEventListener('click', () => {
+            isLoginMode = !isLoginMode; 
+            toggleAuthForm();
+            isLoginMode = !isLoginMode; 
+        });
+
+        function loginUser() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = MEOWXQ_DB[email];
+
+            if (!email.endsWith('@meowxq')) {
+                 alert('Помилка: Використовуйте тільки пошту @meowxq!');
+            } else if (user && user.password === password) {
+                loggedInUser = { email: email, isAdmin: user.isAdmin || false };
+                updateStartMenu(loggedInUser.isAdmin); 
+                alert(`Вхід успішний! Вітаємо, ${email}!`);
+                closeAuthModal();
+            } else {
+                alert('Помилка входу: Невірний логін або пароль.');
+            }
+        }
+
+        function instantLogin() {
+            const code = document.getElementById('recoveryCode').value;
+            let success = false;
+
+            for (const email in MEOWXQ_DB) {
+                if (MEOWXQ_DB[email].recoveryCode === code) {
+                    const user = MEOWXQ_DB[email];
+                    loggedInUser = { email: email, isAdmin: user.isAdmin || false };
+                    updateStartMenu(loggedInUser.isAdmin);
+                    alert(`З поверненням, ${email}! Код відновлення прийнято!`);
+                    closeAuthModal();
+                    success = true;
+                    break;
+                }
+            }
+
+            if (!success) {
+                alert('Помилка: Невірний Код Відновлення.');
+            }
+        }
+
+        function registerUser() {
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const recoveryCode = document.getElementById('registerRecoveryCode').value.trim();
+
+            if (MEOWXQ_DB[email]) {
+                alert('Помилка: Цей акаунт @meowxq вже існує!');
+            } else if (!email.endsWith('@meowxq')) {
+                alert('Помилка: Використовуйте лише пошту @meowxq!');
+            } else if (password.length < 8) { 
+                alert('Помилка: Пароль має бути не менше 8 символів.');
+            } else if (recoveryCode.length < 6) { 
+                alert('Помилка: Код Відновлення має бути не менше 6 символів.');
+            } else {
+                // Додаємо новий акаунт (без адмін-прав)
+                MEOWXQ_DB[email] = {
+                    password: password,
+                    recoveryCode: recoveryCode,
+                    isAdmin: false 
+                };
+                alert(`Вітаємо! Ваш акаунт ${email} створено. Спробуйте увійти!`);
+                closeAuthModal();
+            }
+        }
+        
+        // 6. АДМІНІСТРАТИВНІ ФУНКЦІЇ 
+        function openAdminPanel() {
+            if (!loggedInUser || !loggedInUser.isAdmin) return; 
+
+            const userCount = Object.keys(MEOWXQ_DB).length;
+
+            const adminContent = `
+                <div id="adminPanel" style="padding:10px; border: 1px solid #00ff99; margin-top: 10px; background: #0d0d0d;">
+                    <h4>Панель Адміністратора: ${loggedInUser.email}</h4>
+                    <p style="color:#00ff99; font-weight: bold;">Користувачів у базі: ${userCount}</p>
+                    <hr style="border-color: #333;">
+                    
+                    <button onclick="logoutAccount()" style="background:#cc0000; color:#fff; padding: 5px; margin-bottom: 10px;">Вийти з Акаунту</button>
+                    
+                    <p style="color:#ff9900;">ВИДАЛЕННЯ АКАУНТУ:</p>
+                    <input type="email" id="deleteEmail" placeholder="Email або Код для видалення" style="width: 80%;">
+                    <button onclick="deleteAccount()" style="background:#ff0000; color:#fff; padding: 5px; margin-top: 5px;">Видалити</button>
+                </div>
+            `;
+            desktop.innerHTML = adminContent;
+        }
+
+        function logoutAccount() {
+            if (confirm(`Ви впевнені, що хочете вийти з акаунту ${loggedInUser.email}?`)) {
+                loggedInUser = null;
+                updateStartMenu(false);
+                desktop.innerHTML = `
+                    <div class="app-window">
+                        <h4>Що нового у MeowXQ ОС:</h4>
+                        <p style="color: #aaaaaa;">База оновлень порожня. **MeowXQ ОС** ініціалізовано.</p>
+                        <p style="color: #00ff99;">Статус: **Стабільний.** Чекаємо на перше оновлення!</p>
+                    </div>
+                `;
+                alert('Вихід виконано. До нових зустрічей!');
+            }
+        }
+
+        function deleteAccount() {
+            const identifier = document.getElementById('deleteEmail').value.trim();
+            let emailToDelete = null;
+
+            if (MEOWXQ_DB[identifier]) {
+                emailToDelete = identifier;
+            } else {
+                for (const email in MEOWXQ_DB) {
+                    if (MEOWXQ_DB[email].recoveryCode === identifier) {
+                        emailToDelete = email;
+                        break;
+                    }
+                }
+            }
+
+            if (!emailToDelete) {
+                alert('Помилка: Акаунт не знайдено за Email або Кодом Відновлення.');
+                return;
+            }
+            
+            if (emailToDelete === loggedInUser.email) {
+                alert('Помилка: Не можна видалити активний акаунт через цю панель. Спочатку вийдіть.');
+                return;
+            }
+
+
+            if (confirm(`Ви впевнені, що хочете ВИДАЛИТИ акаунт: ${emailToDelete}? Це незворотньо!`)) {
+                delete MEOWXQ_DB[emailToDelete];
+                alert(`Акаунт ${emailToDelete} ВИДАЛЕНО.`);
+                document.getElementById('deleteEmail').value = '';
+                openAdminPanel();
+            }
+        }
+
+
+        // Закриття по кліку поза вікном
+        window.onclick = function(event) {
+            if (event.target == authModal) {
+                closeAuthModal();
+            }
+        }
+		
+		// ФУНКЦІЯ: ОБРОБКА НОВИН
+        function processNewTags() {
+            const newsElements = document.querySelectorAll('.news-item');
+            const currentDate = (new Date()).toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' });	
+
+            newsElements.forEach(newsElement => {
+                const title = newsElement.getAttribute('title');
+                const text = newsElement.getAttribute('text');
+                let dateAttr = newsElement.getAttribute('date');
+                
+                const dateDisplay = dateAttr === 'current' ? `Сьогодні, ${currentDate}` : dateAttr;
+
+                newsElement.innerHTML = `
+                    <p class="date-info">Дата публікації: ${dateDisplay}</p>
+                    <h3>${title}</h3>
+                    <p>${text}</p>
+                `;
+            });
+        }
+        
+        // ФУНКЦІЯ: ВІДОБРАЖЕННЯ ПРОДУКТІВ
+        function renderProducts() {
+            let productsHTML = '';
+
+            if (MEOWXQ_PRODUCTS.length === 0) {
+                // Якщо продуктів немає, показуємо заглушку
+                productsHTML = `
+                    <div class="empty-list">
+                        <p>Каталог продуктів порожній.</p>
+                        <p>Дата оновлення продукту: **Очікується**.</p>
+                    </div>
+                `;
+            } else {
+                // Створюємо картки для кожного продукту
+                productsHTML = MEOWXQ_PRODUCTS.map(product => {
+                    const featuresList = product.features.map(f => `<li>${f}</li>`).join('');
+                    return `
+                        <div class="product-card">
+                            <h3>${product.name} (Модель: ${product.model})</h3>
+                            <p>${product.description}</p>
+                            <p><strong>Статус:</strong> ${product.status}</p>
+                            <p><strong>Очікувана дата:</strong> ${product.expectedDate}</p>
+                            <p><strong>Ключові особливості:</strong></p>
+                            <ul>${featuresList}</ul>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            productsContainer.innerHTML = productsHTML;
+        }
+
+        // Викликаємо функції після завантаження DOM
+        document.addEventListener('DOMContentLoaded', () => {
+             processNewTags(); 
+             renderProducts(); 
+        });
+    </script>
+</body>
+</html>
